@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <RootNamespace>PROJ_ValorantAgents</RootNamespace>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Data\agents.json" />
+    <None Remove="Resources\Fonts\Proxima Nova Black.otf" />
+    <None Remove="Resources\Fonts\Proxima Nova Bold.otf" />
+    <None Remove="Resources\Fonts\Proxima Nova Extrabold.otf" />
+    <None Remove="Resources\Fonts\Proxima Nova Thin.otf" />
+    <None Remove="Resources\Fonts\ProximaNova-Regular.otf" />
+    <None Remove="Resources\Fonts\Tungsten-Bold.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Data\agents.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\Proxima Nova Black.otf" />
+    <Resource Include="Resources\Fonts\Proxima Nova Bold.otf" />
+    <Resource Include="Resources\Fonts\Proxima Nova Extrabold.otf" />
+    <Resource Include="Resources\Fonts\Proxima Nova Thin.otf" />
+    <Resource Include="Resources\Fonts\ProximaNova-Regular.otf" />
+    <Resource Include="Resources\Fonts\Tungsten-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>
