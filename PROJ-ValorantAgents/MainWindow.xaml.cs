@@ -23,19 +23,6 @@ namespace PROJ_ValorantAgents
         public MainWindow()
         {
             InitializeComponent();
-            Loaded += MainWindow_Loaded;
-        }
-
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                await AgentsApiRepository.LoadAgentsAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error loading agents", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
     }
 }

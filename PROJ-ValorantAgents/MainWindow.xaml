@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PROJ_ValorantAgents"
         xmlns:vm="clr-namespace:PROJ_ValorantAgents.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="720" Width="1280">
 
 
     <Window.DataContext>

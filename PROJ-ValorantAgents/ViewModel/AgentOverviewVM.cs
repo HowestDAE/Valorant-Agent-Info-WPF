@@ -13,8 +13,8 @@ namespace PROJ_ValorantAgents.ViewModel
         public List<Agent> Agents { get; set; }
         public List<LocalAgent> LocalAgents { get; set; }
 
-        private Agent? _selectedAgent;
-        public Agent? SelectedAgent
+        private Agent _selectedAgent = new Agent();
+        public Agent SelectedAgent
         {
             get { return _selectedAgent; }
             set
@@ -26,9 +26,15 @@ namespace PROJ_ValorantAgents.ViewModel
 
         public AgentOverviewVM()
         {
-            Agents = AgentsApiRepository.Agents;
             LocalAgents = AgentsLocalRepository.GetLocalAgents();
+            OnPropertyChanged(nameof(LocalAgents));
 
+            LoadAgentsAsync();
+        }
+
+        private async void LoadAgentsAsync()
+        {
+            Agents = await AgentsApiRepository.GetAgentsAsync();
             OnPropertyChanged(nameof(Agents));
         }
     }

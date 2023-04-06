@@ -10,11 +10,18 @@
 
   <ItemGroup>
     <None Remove="Resources\Data\agents.json" />
+    <None Remove="Resources\Fonts\americorps.ttf" />
+    <None Remove="Resources\Fonts\DIN-Next-LT-Pro-Regular.ttf" />
+    <None Remove="Resources\Fonts\DINNextLTPro-Bold.ttf" />
     <None Remove="Resources\Fonts\Proxima Nova Black.otf" />
     <None Remove="Resources\Fonts\Proxima Nova Bold.otf" />
     <None Remove="Resources\Fonts\Proxima Nova Extrabold.otf" />
     <None Remove="Resources\Fonts\Proxima Nova Thin.otf" />
+    <None Remove="Resources\Fonts\Proxima-Nova-Bold.otf" />
+    <None Remove="Resources\Fonts\Proxima-Nova-Thin.otf" />
     <None Remove="Resources\Fonts\ProximaNova-Regular.otf" />
+    <None Remove="Resources\Fonts\ProximaNovaThin.otf" />
+    <None Remove="Resources\Fonts\Tungsten-Bold.otf" />
     <None Remove="Resources\Fonts\Tungsten-Bold.ttf" />
   </ItemGroup>
 
@@ -30,12 +37,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Fonts\Proxima Nova Black.otf" />
-    <Resource Include="Resources\Fonts\Proxima Nova Bold.otf" />
-    <Resource Include="Resources\Fonts\Proxima Nova Extrabold.otf" />
-    <Resource Include="Resources\Fonts\Proxima Nova Thin.otf" />
-    <Resource Include="Resources\Fonts\ProximaNova-Regular.otf" />
-    <Resource Include="Resources\Fonts\Tungsten-Bold.ttf">
+    <Resource Include="Resources\Fonts\DIN-Next-LT-Pro-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\DINNextLTPro-Bold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Proxima-Nova-Bold.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Proxima-Nova-Thin.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\ProximaNova-Regular.otf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Fonts\Tungsten-Bold.otf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

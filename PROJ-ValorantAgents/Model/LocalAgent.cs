@@ -14,7 +14,18 @@ namespace PROJ_ValorantAgents.Model
 
     public class LocalAgent
     {
-        public string name { get; set; }
-        public Biography biography { get; set; }
+        private string _name;
+        public string Name
+        {
+            get { return _name.ToUpper(); }
+            set { _name = value; }
+        }
+        public Biography Biography { get; set; }
+
+        //override tostring
+        public override string ToString()
+        {
+            return Name.ToUpper();
+        }
     }
 }

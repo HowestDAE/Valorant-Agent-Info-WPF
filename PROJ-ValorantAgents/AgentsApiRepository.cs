@@ -11,31 +11,31 @@ namespace PROJ_ValorantAgents
 {
     internal class AgentsApiRepository
     {
-        private static List<Agent> _agents;
-        public static List<Agent> Agents
-        {
-            get { return _agents; }
-        }
+        private static List<Agent> agents = new List<Agent>();
         
-        public static async Task LoadAgentsAsync()
+        public static async Task<List<Agent>> GetAgentsAsync()
         {
-            const string url = "https://valorant-api.com/v1/agents";
-
-            using (HttpClient client = new HttpClient())
+            if(agents.Count == 0)
             {
-                var response = await client.GetAsync(url);
+                const string url = "https://valorant-api.com/v1/agents";
 
-                if(!response.IsSuccessStatusCode) throw new HttpRequestException(response.ReasonPhrase);
+                using (HttpClient client = new HttpClient())
+                {
+                    using (HttpResponseMessage response = await client.GetAsync(url))
+                    {
+                        using (HttpContent content = response.Content)
+                        {
+                            string json = await content.ReadAsStringAsync();
+                            AgentListWrapper agentsList = JsonConvert.DeserializeObject<AgentListWrapper>(json);
+                            if(agentsList == null) throw new Exception("Failed to deserialize data from json.");
 
-                string json = await response.Content.ReadAsStringAsync();
+                            agents = agentsList.Data;
+                            return agents;
+                        }
+                    }
+                }
+            } else { return agents; }
 
-                // deserialize json
-                var serializedData = JsonConvert.DeserializeObject<Root>(json);
-
-                if (serializedData == null) throw new Exception("Failed to deserialize agents.");
-
-                _agents = serializedData.data;
-            }
         }
     }
 }
