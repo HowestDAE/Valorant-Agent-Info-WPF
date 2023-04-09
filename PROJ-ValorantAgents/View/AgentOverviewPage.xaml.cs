@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PROJ_ValorantAgents.Model;
+using PROJ_ValorantAgents.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,28 @@ namespace PROJ_ValorantAgents.View
         public AgentOverviewPage()
         {
             InitializeComponent();
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if(DataContext is AgentOverviewVM vm)
+            {
+                if(vm.SearchText.ToUpper() == "SEARCH")
+                {
+                    vm.SearchText = string.Empty;
+                }
+            }
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if(DataContext is AgentOverviewVM vm)
+            {
+                if(string.IsNullOrEmpty(vm.SearchText))
+                {
+                    vm.SearchText = "SEARCH";
+                }
+            }
         }
     }
 }

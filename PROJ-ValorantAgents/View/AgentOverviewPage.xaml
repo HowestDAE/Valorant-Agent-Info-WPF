@@ -28,7 +28,9 @@
         <FontFamily x:Key="ProximaNovaBold">pack://application:,,,/Resources/Fonts/Proxima-Nova-Bold.otf#Proxima Nova Rg</FontFamily>
         
         <!-- BUTTON STYLE -->
-        <ControlTemplate x:Key="NoMouseOverButtonTemplate"   
+        
+        <!--== Filter buttons template==-->
+        <ControlTemplate x:Key="FilterButtonTemplate"   
                  TargetType="Button">
             <Border Background="Transparent"
                     BorderBrush="{TemplateBinding BorderBrush}"  
@@ -38,7 +40,7 @@
                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Border>
-
+            
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="FontFamily" Value="{StaticResource ProximaNovaBold}" />
@@ -51,13 +53,38 @@
 
         </ControlTemplate>
 
+        <!--== special abilities button template==-->
+        <ControlTemplate x:Key="SwitchButtonTemplate" TargetType="Button">
+            <Grid>
+                <Border Background="Transparent" 
+                BorderBrush="{TemplateBinding BorderBrush}"  
+                BorderThickness="0"
+                Padding="5">
+                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=DarkBlue}" />
+                </Trigger>
+                
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=Red}" />
+                </Trigger>
+                
+            </ControlTemplate.Triggers>
+            
+        </ControlTemplate>
+        
+        
         <Style TargetType="Button">
-            <Setter Property="Template" Value="{StaticResource NoMouseOverButtonTemplate}"/>
+            <Setter Property="Template" Value="{StaticResource FilterButtonTemplate}"/>
             <Setter Property="FontFamily" Value="{StaticResource ProximaNovaThin}"/>
             <Setter Property="Foreground" Value="{StaticResource OffWhite}"/>
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-
         </Style>
 
 
@@ -107,8 +134,6 @@
                 </Trigger>
 
             </Style.Triggers>
-
-
         </Style>
 
         <!-- TEXTBLOCK STYLE -->
@@ -121,10 +146,7 @@
 
     </Page.Resources>
 
-
     <Grid Background="{StaticResource DarkBlue}" >
-
-
         <!-- BACKGROUND DECORATION -->
         <Grid>
             <Grid.ColumnDefinitions>
@@ -173,7 +195,7 @@
                     <RowDefinition Height="2.5*"/>
                 </Grid.RowDefinitions>
 
-                
+
                 <StackPanel Grid.Column="1" Grid.Row="1" 
                             Orientation="Vertical" VerticalAlignment="Center">
 
@@ -190,15 +212,12 @@
 
                         <Image Source="{Binding SelectedAgent.role.displayIcon}" 
                                Height="20" Margin="5" VerticalAlignment="Top"/>
-                        
+
                         <Rectangle Grid.Column="0" Width="100" Height="5"
                          VerticalAlignment="Top" 
                          Margin="5"
                          Fill="{StaticResource Red}"/>
                     </StackPanel>
-
-
-
 
                     <!-- BIOGRAPHY -->
                     <TextBlock Text="// BIOGRAPHY" Margin="0,15,0,0"/>
@@ -209,9 +228,6 @@
                                Margin="0,40"/>
                 </StackPanel>
             </Grid>
-
-
-
         </Grid>
 
 
@@ -230,29 +246,34 @@
             </Grid.RowDefinitions>
 
             <!-- FILTERS -->
-            <StackPanel Grid.Column="1" Grid.ColumnSpan="2"
-                    Orientation="Horizontal">
-                <Button Content="ALL"/>
-                <Button Content="INFILTRATORS"/>
-                <Button Content="DUELISTS"/>
-                <Button Content="CONTROLLERS" />
-                <Button Content="INITIATORS"/>
-                <Button Content="SENTINELS"/>
+            <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Button Content="ALL" Command="{Binding FilterAgentsCommand}" CommandParameter="ALL"/>
+                <Button Content="CONTROLLERS" Command="{Binding FilterAgentsCommand}" CommandParameter="Controller"/>
+                <Button Content="DUELISTS" Command="{Binding FilterAgentsCommand}" CommandParameter="Duelist"/>
+                <Button Content="INITIATORS" Command="{Binding FilterAgentsCommand}" CommandParameter="Initiator"/>
+                <Button Content="SENTINELS" Command="{Binding FilterAgentsCommand}" CommandParameter="Sentinel"/>
             </StackPanel>
 
-            <Button Content="SEARCH" Grid.Column="2" HorizontalAlignment="Right"/>
 
-            
+            <!-- SEARCH BOX -->
+            <TextBox 
+               HorizontalAlignment="Right"
+               Grid.Column="2"
+               Margin="10" 
+               Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+               GotFocus="TextBox_GotFocus"  LostFocus="TextBox_LostFocus"
+               Background="Transparent" Foreground="{StaticResource OffWhite}"
+               FontFamily="{StaticResource ProximaNovaThin}"
+               FontSize="24" VerticalAlignment="Center"/>
+ 
             
             <!-- SWITCH TO ABILITIES -->
-            <Button Content="SPECIAL ABILITIES>" 
+            <Button Content="SPECIAL ABILITIES >" 
                     Grid.Row="2" Grid.Column="2" 
-                    FontFamily="{StaticResource Tungsten}"
-                    FontSize="40"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Foreground="{StaticResource DarkBlue}"
                     Margin="20"
-                    />
+                    Template="{StaticResource SwitchButtonTemplate}"
+                    FontFamily="{StaticResource Tungsten}" FontSize="40"/>
 
             <!-- AGENT SELECTION -->
             <ListBox

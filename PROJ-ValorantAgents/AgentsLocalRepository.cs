@@ -32,8 +32,9 @@ namespace PROJ_ValorantAgents
                     using (StreamReader reader = new StreamReader(stream))
                     {
                         string json = reader.ReadToEnd();
-                        List<LocalAgent> agents = JsonConvert.DeserializeObject<List<LocalAgent>>(json);
+                        if (string.IsNullOrEmpty(json)) throw new Exception("Failed to read json from embedded resource.");
 
+                        List<LocalAgent>? agents = JsonConvert.DeserializeObject<List<LocalAgent>>(json);
                         if (agents == null) throw new Exception("Failed to deserialize data from json.");
 
                         localAgents = agents;

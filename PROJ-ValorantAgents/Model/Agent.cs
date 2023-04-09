@@ -34,7 +34,6 @@ namespace PROJ_ValorantAgents.Model
         }
     }
 
-
     public class Role
     {
         public string displayName { get; set; } = "INITIATOR";
