@@ -53,32 +53,6 @@
 
         </ControlTemplate>
 
-        <!--== special abilities button template==-->
-        <ControlTemplate x:Key="SwitchButtonTemplate" TargetType="Button">
-            <Grid>
-                <Border Background="Transparent" 
-                BorderBrush="{TemplateBinding BorderBrush}"  
-                BorderThickness="0"
-                Padding="5">
-                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                </Border>
-            </Grid>
-            <ControlTemplate.Triggers>
-
-                <Trigger Property="IsMouseOver" Value="False">
-                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=DarkBlue}" />
-                </Trigger>
-                
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=Red}" />
-                </Trigger>
-                
-            </ControlTemplate.Triggers>
-            
-        </ControlTemplate>
-        
-        
         <Style TargetType="Button">
             <Setter Property="Template" Value="{StaticResource FilterButtonTemplate}"/>
             <Setter Property="FontFamily" Value="{StaticResource ProximaNovaThin}"/>
@@ -153,7 +127,8 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
-            <Path Grid.Column="1" Stroke="Black" Fill="{StaticResource OffWhite}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Stretch="Uniform">
+            <Path Grid.Column="1" Stroke="Black" Fill="{StaticResource OffWhite}" 
+                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Stretch="Uniform">
                 <Path.Data>
                     <PathGeometry>
                         <PathFigure StartPoint="-900,200">
@@ -267,14 +242,6 @@
                FontSize="24" VerticalAlignment="Center"/>
  
             
-            <!-- SWITCH TO ABILITIES -->
-            <Button Content="SPECIAL ABILITIES >" 
-                    Grid.Row="2" Grid.Column="2" 
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Margin="20"
-                    Template="{StaticResource SwitchButtonTemplate}"
-                    FontFamily="{StaticResource Tungsten}" FontSize="40"/>
-
             <!-- AGENT SELECTION -->
             <ListBox
                     Grid.Row="1" Grid.Column="1"

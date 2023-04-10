@@ -13,9 +13,51 @@
         <vm:MainViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <SolidColorBrush x:Key="Red" Color="#FD4556"/>
+        <SolidColorBrush x:Key="DarkBlue" Color="#0F1823"/>
+        <FontFamily x:Key="Tungsten">pack://application:,,,/Resources/Fonts/Tungsten-Bold.otf#My Font</FontFamily>
+
+        <ControlTemplate x:Key="SwitchButtonTemplate" TargetType="Button">
+            <Grid>
+                <Border Background="Transparent" 
+                BorderBrush="{TemplateBinding BorderBrush}"  
+                BorderThickness="0"
+                Padding="5">
+                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </Border>
+            </Grid>
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=DarkBlue}" />
+                </Trigger>
+
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=Red}" />
+                </Trigger>
+
+            </ControlTemplate.Triggers>
+
+        </ControlTemplate>
+    </Window.Resources>
+    
+    
+    
     <Grid>
         <Frame NavigationUIVisibility="Hidden" 
                Content="{Binding CurrentPage}"/>
+
+
+        <!-- SWITCH TO ABILITIES -->
+        <Button Content="SPECIAL ABILITIES >"  Command="{Binding SwitchPageCommand}" CommandParameter="{Binding}"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="20"
+                    Template="{StaticResource SwitchButtonTemplate}"
+                
+                    FontFamily="{StaticResource Tungsten}" FontSize="45"/>
+        
     </Grid>
         
 </Window>

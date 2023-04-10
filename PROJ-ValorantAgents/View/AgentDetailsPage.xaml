@@ -4,11 +4,139 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PROJ_ValorantAgents.View"
+      xmlns:vm="clr-namespace:PROJ_ValorantAgents.ViewModel"
+      xmlns:conv="clr-namespace:PROJ_ValorantAgents.View.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="AgentDetailsPage">
 
-    <Grid>
+    <Page.DataContext>
+        <vm:AgentDetailsVM x:Name="AgentDetailsVM"/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <conv:UppercaseConverter x:Key="UppercaseConverter"/>
+        <vm:AgentDetailsVM x:Key="AgentDetailsVM"/>
+        <SolidColorBrush x:Key="Red" Color="#FD4556"/>
+        <SolidColorBrush x:Key="OffWhite" Color="#ECE8E1"/>
+        <SolidColorBrush x:Key="DarkBlue" Color="#0F1823"/>
+
+        <FontFamily x:Key="DinNextBold">pack://application:,,,/Resources/Fonts/DINNextLTPro-Bold.ttf#DIN Next LT Pro</FontFamily>
+        <FontFamily x:Key="Tungsten">pack://application:,,,/Resources/Fonts/Tungsten-Bold.otf#My Font</FontFamily>
+
+        <FontFamily x:Key="ProximaNovaThin">pack://application:,,,/Resources/Fonts/Proxima-Nova-Thin.otf#Proxima Nova Th</FontFamily>
+        <FontFamily x:Key="ProximaNovaBold">pack://application:,,,/Resources/Fonts/Proxima-Nova-Bold.otf#Proxima Nova Rg</FontFamily>
+
+
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Command" Value="{Binding DataContext.SelectAbilityCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+            <Setter Property="CommandParameter" Value="{Binding}"/>
+        </Style>
         
+        
+    </Page.Resources>
+
+
+    <Grid Background="{StaticResource OffWhite}">
+
+        <!-- BACKGROUND DECORATION -->
+        <Grid>
+            <Path Stroke="Black" 
+                  Fill="{StaticResource Red}" 
+                  HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                  Stretch="Uniform">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure StartPoint="40,0">
+                            <LineSegment Point="100,0" />
+                            <LineSegment Point="100,100" />
+                            <LineSegment Point="-5,100" />
+
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+        </Grid>
+
+        <!-- AGENT VISUALS -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Column="1" Source="{Binding CurrentAgent.background }" 
+                   Margin="-130" Stretch="UniformToFill"/>
+            
+            <Image Source="{Binding CurrentAgent.fullPortrait }"
+                   VerticalAlignment="Top" HorizontalAlignment="Right" 
+                   Stretch="UniformToFill"
+                   Margin="0,-198,-708,0"  Height="1875" Grid.ColumnSpan="2"/>
+            
+        </Grid>
+
+
+        <!-- ABILITIES DETAILS -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".1*"/>
+                <ColumnDefinition Width="1.4*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".3*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height=".4*"/>
+                <RowDefinition Height=".4*"/>
+            </Grid.RowDefinitions>
+
+            <Viewbox HorizontalAlignment="Left"  Grid.Column="1" Grid.Row="1">
+                <TextBlock Text="{Binding CurrentAbility.displayName, Converter={StaticResource UppercaseConverter}}"
+                       FontFamily="{StaticResource Tungsten}"/>
+            </Viewbox>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
+
+                
+                <TextBlock Text="{Binding CurrentAbility.description}" 
+                           FontFamily="{StaticResource DinNextBold}" FontSize="16" TextWrapping="Wrap"
+                           VerticalAlignment="Bottom"/>
+            </StackPanel>
+            
+            
+             <ItemsControl Grid.Column="1" Grid.Row="3"
+             ItemsSource="{Binding CurrentAgent.abilities}">
+
+                 <ItemsControl.ItemsPanel>
+                     <ItemsPanelTemplate>
+                         <UniformGrid Columns="{Binding CurrentAgent.abilities.Count}"  />
+                     </ItemsPanelTemplate>
+                 </ItemsControl.ItemsPanel>
+
+                 <ItemsControl.ItemTemplate>
+                     <DataTemplate>
+                         <Viewbox>
+                             <Button BorderThickness="1" BorderBrush="Black" Width="100" Height="100" 
+                                     CommandParameter="{Binding}">
+
+                                 <Rectangle Fill="{StaticResource Red}" Stretch="UniformToFill">
+                                     <Rectangle.OpacityMask>
+                                         <ImageBrush ImageSource="{Binding displayIcon}"/>
+                                     </Rectangle.OpacityMask>
+                                 </Rectangle>
+                         </Button>
+                         </Viewbox>
+                     
+                     </DataTemplate>
+                 </ItemsControl.ItemTemplate>
+
+             </ItemsControl>
+        </Grid>
     </Grid>
 </Page>

@@ -26,14 +26,14 @@ namespace PROJ_ValorantAgents.ViewModel
 
         public void SwitchPage()
         {
-            if (CurrentPage is AgentOverviewVM)
+            if (CurrentPage is AgentOverviewPage)
             {
-                Agent selectedAgent = (CurrentPage.DataContext as AgentOverviewVM).SelectedAgent;
+                Agent? selectedAgent = (CurrentPage.DataContext as AgentOverviewVM).SelectedAgent;
+                if (selectedAgent == null || selectedAgent.abilities.Count == 0) return;
 
-                if (selectedAgent == null) return;
 
                 (AgentDetails.DataContext as AgentDetailsVM).CurrentAgent = selectedAgent;
-
+                (AgentDetails.DataContext as AgentDetailsVM).CurrentAbility = selectedAgent.abilities[0];
                 CurrentPage = AgentDetails;
                 OnPropertyChanged(nameof(CurrentPage));
             }
@@ -42,6 +42,12 @@ namespace PROJ_ValorantAgents.ViewModel
                 CurrentPage = AgentOverview; 
                 OnPropertyChanged(nameof(CurrentPage));
             }
+        }
+
+
+        public MainViewModel()
+        {
+            SwitchPageCommand = new RelayCommand(SwitchPage);
         }
     }
 }
