@@ -13,6 +13,7 @@
     <None Remove="Resources\Fonts\americorps.ttf" />
     <None Remove="Resources\Fonts\DIN-Next-LT-Pro-Regular.ttf" />
     <None Remove="Resources\Fonts\DINNextLTPro-Bold.ttf" />
+    <None Remove="Resources\Fonts\DINNextLTPro-Medium.ttf" />
     <None Remove="Resources\Fonts\Proxima Nova Black.otf" />
     <None Remove="Resources\Fonts\Proxima Nova Bold.otf" />
     <None Remove="Resources\Fonts\Proxima Nova Extrabold.otf" />
@@ -37,10 +38,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Fonts\DIN-Next-LT-Pro-Regular.ttf">
+    <Resource Include="Resources\Fonts\DINNextLTPro-Bold.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Resources\Fonts\DINNextLTPro-Bold.ttf">
+    <Resource Include="Resources\Fonts\DINNextLTPro-Medium.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Fonts\Proxima-Nova-Bold.otf">

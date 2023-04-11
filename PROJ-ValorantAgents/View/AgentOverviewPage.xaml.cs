@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -27,25 +28,22 @@ namespace PROJ_ValorantAgents.View
             InitializeComponent();
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void OnOpenSearchBox(object sender, RoutedEventArgs e)
         {
-            if(DataContext is AgentOverviewVM vm)
+            Button? closeButton = FindName("CloseSearchButton") as Button;
+
+            if (closeButton != null)
             {
-                if(vm.SearchText.ToUpper() == "SEARCH")
-                {
-                    vm.SearchText = string.Empty;
-                }
+                closeButton.Width = double.NaN; // Set the Width to "auto"
             }
         }
 
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void CloseSearchBox(object sender, RoutedEventArgs e)
         {
-            if(DataContext is AgentOverviewVM vm)
+            Button? closeButton = sender as Button;
+            if (closeButton != null)
             {
-                if(string.IsNullOrEmpty(vm.SearchText))
-                {
-                    vm.SearchText = "SEARCH";
-                }
+                closeButton.Width = 0; 
             }
         }
     }

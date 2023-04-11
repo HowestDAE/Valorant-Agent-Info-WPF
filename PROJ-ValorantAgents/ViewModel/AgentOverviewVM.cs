@@ -51,7 +51,7 @@ namespace PROJ_ValorantAgents.ViewModel
         public ICommand FilterAgentsCommand { get; private set; }
         public ICommand SearchCommand { get; private set; }
 
-        private string _searchText = "SEARCH";
+        private string _searchText = "";
         public string SearchText
         {
             get { return _searchText; }
@@ -91,22 +91,6 @@ namespace PROJ_ValorantAgents.ViewModel
         {
             Agents = await AgentsApiRepository.GetAgentsByNameAsync(SearchText);
             OnPropertyChanged(nameof(SearchText));
-        }
-
-        public void NameSearch_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (SearchText == "SEARCH")
-            {
-                SearchText = "";
-            }
-        }
-
-        public void NameSearch_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(SearchText))
-            {
-                SearchText = "SEARCH";
-            }
         }
     }
 }
