@@ -10,20 +10,13 @@ namespace PROJ_ValorantAgents
 {
     internal class AgentsLocalRepository
     {
-        private static List<LocalAgent> localAgents = new List<LocalAgent>();
-        public static List<LocalAgent> GetLocalAgents()
+        private static List<Agent> _agents = new List<Agent>();
+        public static List<Agent> GetAgents()
         {
-            if(localAgents.Count == 0)
+            if(_agents.Count == 0)
             {
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 var resourceName = "PROJ_ValorantAgents.Resources.Data.agents.json";
-
-                var resourceNames = assembly.GetManifestResourceNames();
-
-                foreach (var name in resourceNames)
-                {
-                    Console.WriteLine(name);
-                }
 
                 using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
                 {
@@ -34,14 +27,21 @@ namespace PROJ_ValorantAgents
                         string json = reader.ReadToEnd();
                         if (string.IsNullOrEmpty(json)) throw new Exception("Failed to read json from embedded resource.");
 
-                        List<LocalAgent>? agents = JsonConvert.DeserializeObject<List<LocalAgent>>(json);
+                        List<Agent>? agents = JsonConvert.DeserializeObject<List<Agent>>(json);
                         if (agents == null) throw new Exception("Failed to deserialize data from json.");
 
-                        localAgents = agents;
+                        _agents = agents;
                         return agents;
                     }
                 }
-            } else { return localAgents; }
+            } else { return _agents; }
+        }
+
+        public static Agent? GetAgent(string name)
+        {
+            if(_agents.Count == 0) GetAgents();
+
+            return _agents.FirstOrDefault(agent => agent.displayName.ToLower() == name.ToLower());
         }
     }
 }

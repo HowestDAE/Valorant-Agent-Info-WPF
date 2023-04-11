@@ -15,7 +15,6 @@ namespace PROJ_ValorantAgents.ViewModel
     internal class AgentOverviewVM : ObservableObject
     {
         public List<Agent>? Agents { get; set; }
-        public List<LocalAgent> LocalAgents { get; set; }
 
 
         private Agent _selectedAgent = new Agent();
@@ -68,9 +67,6 @@ namespace PROJ_ValorantAgents.ViewModel
 
         public AgentOverviewVM()
         {
-            LocalAgents = AgentsLocalRepository.GetLocalAgents();
-            OnPropertyChanged(nameof(LocalAgents));
-
             LoadAgentsAsync();
 
             FilterAgentsCommand = new RelayCommand<string>(async (role) => await FilterAgentsByRole(role));

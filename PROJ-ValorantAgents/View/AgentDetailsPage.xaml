@@ -101,11 +101,12 @@
                        FontFamily="{StaticResource Tungsten}"/>
             </Viewbox>
 
+            
             <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
-
+                <MediaElement Source="{Binding CurrentAbility.tutorialVideo}" Stretch="UniformToFill" />
                 
                 <TextBlock Text="{Binding CurrentAbility.description}" 
-                           FontFamily="{StaticResource DinNextBold}" FontSize="16" TextWrapping="Wrap"
+                           FontFamily="{StaticResource DinNextBold}" FontSize="20" TextWrapping="Wrap"
                            VerticalAlignment="Bottom"/>
             </StackPanel>
             

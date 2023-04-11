@@ -245,7 +245,7 @@
             <!-- AGENT SELECTION -->
             <ListBox
                     Grid.Row="1" Grid.Column="1"
-                    ItemsSource="{Binding Agents}" 
+                    ItemsSource="{Binding Agents}"  
                     SelectedItem="{Binding SelectedAgent}" SelectionMode="Single">
             </ListBox>
 
