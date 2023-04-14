@@ -85,7 +85,7 @@
                     FontFamily="{StaticResource Tungsten}" FontSize="45"/>
 
 
-        <Grid>
+        <!--<Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".25*"/>
                 <ColumnDefinition/>
@@ -116,7 +116,7 @@
                     VerticalAlignment="Center" HorizontalContentAlignment="Center"
                     Template="{StaticResource ReturnButtonTemplate}"
                     FontFamily="{StaticResource Tungsten}" FontSize="45"/>
-        </Grid>
+        </Grid>-->
       
 
     </Grid>
