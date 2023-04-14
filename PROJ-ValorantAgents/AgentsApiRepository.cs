@@ -146,5 +146,19 @@ namespace PROJ_ValorantAgents
                 return agents.Where(agent => agent.displayName.ToLower().Contains(searchName.ToLower())).ToList();
             }
         }
+
+        public static async Task<List<Agent>> GetFilteredAgents(string role, string name)
+        {
+            if(agents.Count == 0)
+            {
+                agents = await GetAgentsAsync();
+            }
+
+            // filter agents by role
+            List<Agent> filteredAgents = agents.Where(agent => agent.role.displayName.ToLower() == role.ToLower()).ToList();
+
+            // filter agents by name
+            return filteredAgents.Where(agent => agent.displayName.ToLower().Contains(name.ToLower())).ToList();
+        }
     }
 }

@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:PROJ_ValorantAgents.View"
       xmlns:vm="clr-namespace:PROJ_ValorantAgents.ViewModel"
       xmlns:conv="clr-namespace:PROJ_ValorantAgents.View.Converters" xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+      xmlns:ex="clr-namespace:PROJ_ValorantAgents.View.Extensions"
       mc:Ignorable="d" 
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="AgentOverviewPage">
@@ -15,22 +16,34 @@
     </Page.DataContext>
 
     <Page.Resources>
-        <conv:UppercaseConverter x:Key="UppercaseConverter"/>
-
+        <FontFamily x:Key="DinNextMedium">pack://application:,,,/Resources/Fonts/DINNextLTPro-Medium.ttf#DIN Next LT Pro Medium</FontFamily>
+        <FontFamily x:Key="DinNextBold">pack://application:,,,/Resources/Fonts/DINNextLTPro-Bold.ttf#DIN Next LT Pro</FontFamily>
+        <FontFamily x:Key="Tungsten">pack://application:,,,/Resources/Fonts/Tungsten-Bold.otf#My Font</FontFamily>
+        
         <SolidColorBrush x:Key="Red" Color="#FD4556"/>
         <SolidColorBrush x:Key="OffWhite" Color="#ECE8E1"/>
         <SolidColorBrush x:Key="Blue" Color="#20303F"/>
         <SolidColorBrush x:Key="DarkBlue" Color="#0F1823"/>
 
-        <FontFamily x:Key="DinNextMedium">pack://application:,,,/Resources/Fonts/DINNextLTPro-Medium.ttf#DIN Next LT Pro Medium</FontFamily>
-        <FontFamily x:Key="DinNextBold">pack://application:,,,/Resources/Fonts/DINNextLTPro-Bold.ttf#DIN Next LT Pro</FontFamily>
-        <FontFamily x:Key="Tungsten">pack://application:,,,/Resources/Fonts/Tungsten-Bold.otf#My Font</FontFamily>
+        <Geometry x:Key="SearchSVG">M19,18.6L13.8,13.4C15.2,12,16,10.1,16,8c0-4.4-3.6-8-8-8S0,3.6,0,8s3.6,8,8,8c1.6,0,3.1-0.5,4.3-1.3l5.3,5.3L19,18.6zM2,8c0-3.3,2.7-6,6-6c1.6,0,3.1,0.6,4.2,1.8C13.4,4.9,14,6.4,14,8s-0.6,3.1-1.8,4.2C11.1,13.4,9.6,14,8,14C4.7,14,2,11.3,2,8z</Geometry>
+        <Geometry x:Key="CrossSVG">M34.0001 35.4143L40.793 42.2072L42.2072 40.793L35.4143 34.0001L42.2072 27.2073L40.793 25.793L34.0001 32.5859L27.2072 25.793L25.793 27.2072L32.5859 34.0001L25.793 40.793L27.2072 42.2073L34.0001 35.4143Z</Geometry>
+        <Geometry x:Key="CloudSVG">M5.6,33.8h42.3c0,0,10.8-1.7,10.8-10.8S48.4,12.8,48.4,12.8S47.9,0,35.6,0c0,0-8.4-0.8-12.4,7
+	    c0,0-12.2-1.8-13.4,9.6c0,0-9.8,0-9.8,8.6C0,33.3,5.6,33.8,5.6,33.8z</Geometry>
+        <Geometry x:Key="DesktopSVG">M37.8,26H1.7C0.8,26,0,25.3,0,24.3V1.7C0,0.8,0.8,0,1.7,0h36.1c0.9,0,1.7,0.8,1.7,1.7v22.6
+		C39.5,25.3,38.8,26,37.8,26z M19.8,26v7.8 M11.6,33.8h16.3</Geometry>
 
-        <FontFamily x:Key="ProximaNovaThin">pack://application:,,,/Resources/Fonts/Proxima-Nova-Thin.otf#Proxima Nova Th</FontFamily>
-        <FontFamily x:Key="ProximaNovaBold">pack://application:,,,/Resources/Fonts/Proxima-Nova-Bold.otf#Proxima Nova Rg</FontFamily>
-        
+        <conv:UppercaseConverter x:Key="UppercaseConverter"/>
+        <conv:BooleanToBrushConverter x:Key="IsUsingApiToColor"
+                                    TrueBrush="{StaticResource ResourceKey=Blue}"
+                                    FalseBrush="{StaticResource ResourceKey=Red}" />
+
+        <conv:BooleanToPathDataConverter x:Key="IsUsingApiToIcon"
+                                         TruePathData="{StaticResource ResourceKey=CloudSVG}"
+                                         FalsePathData="{StaticResource ResourceKey=DesktopSVG}"/>
+
+
         <!-- BUTTON STYLE -->
-        
+
         <!--== Filter buttons template==-->
         <ControlTemplate x:Key="FilterButtonTemplate"   
                  TargetType="Button">
@@ -42,10 +55,10 @@
                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
             </Border>
-            
+
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="FontFamily" Value="{StaticResource ProximaNovaBold}" />
+                    <Setter Property="FontFamily" Value="{StaticResource DinNextBold}" />
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Foreground" Value="{StaticResource ResourceKey=Red}" />
                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -72,7 +85,7 @@
             <Setter Property="BorderThickness" Value="0"/>
 
         </Style>
-        
+
         <Style TargetType="ListBoxItem">
             <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
 
@@ -130,33 +143,39 @@
             To="200"
             Duration="0:0:0.3"/>
 
-            
-            <ThicknessAnimation
-                Storyboard.TargetName="searchBox"
-                Storyboard.TargetProperty="Margin"
-                From="0,0,0,0"
-                To="35,0,10,0"
-                Duration="0:0:0"/>
+
+            <DoubleAnimation
+            Storyboard.TargetName="CloseSearchButton"
+            Storyboard.TargetProperty="(FrameworkElement.Width)"
+            From="0"
+            To="50"
+            Duration="0:0:0.3"/>
+
+
         </Storyboard>
 
         <Storyboard x:Key="HideSearchBox">
             <DoubleAnimation
             Storyboard.TargetName="searchBox"
             Storyboard.TargetProperty="(FrameworkElement.Width)"
-            From="0"
-            To="200"
+            From="200"
+            To="0"
             Duration="0:0:0.2"/>
-            <ThicknessAnimation
-                Storyboard.TargetName="searchBox"
-                Storyboard.TargetProperty="Margin"
-                From="35,0,10,0"
-                To="0,0,0,0"
-                Duration="0:0:0"/>
+
+
+            <DoubleAnimation
+            Storyboard.TargetName="CloseSearchButton"
+            Storyboard.TargetProperty="(FrameworkElement.Width)"
+            From="50"
+            To="0"
+            Duration="0:0:0.3"/>
+
+
         </Storyboard>
-        
+
     </Page.Resources>
 
-    <Grid Background="{StaticResource DarkBlue}" >
+    <Grid Background="{StaticResource DarkBlue}" x:Name="BackgroundGrid" Focusable="True">
         <!-- BACKGROUND DECORATION -->
         <Grid>
             <Grid.ColumnDefinitions>
@@ -210,7 +229,7 @@
                 <StackPanel Grid.Column="1" Grid.Row="1" 
                             Orientation="Vertical" VerticalAlignment="Center">
 
-                    <TextBlock Text="// ROLE" Margin="0,15"/>
+                    <TextBlock Text="// ROLE" FontFamily="{StaticResource DinNextBold}" Margin="0,15"/>
 
                     <!-- ROLE -->
                     <StackPanel Orientation="Horizontal" Height="50">
@@ -222,7 +241,7 @@
                                    Padding="0" Margin="0"/>
 
                         <Image Source="{Binding SelectedAgent.role.displayIcon}" 
-                               Height="20" Margin="5" VerticalAlignment="Top"/>
+                               Height="20" Margin="5" VerticalAlignment="Top" IsHitTestVisible="False"/>
 
                         <Rectangle Grid.Column="0" Width="100" Height="5"
                          VerticalAlignment="Top" 
@@ -231,7 +250,7 @@
                     </StackPanel>
 
                     <!-- BIOGRAPHY -->
-                    <TextBlock Text="// BIOGRAPHY" Margin="0,15,0,0"/>
+                    <TextBlock Text="// BIOGRAPHY" FontFamily="{StaticResource DinNextBold}" Margin="0,15,0,0"/>
                     <TextBlock Text="{Binding SelectedAgent.description}" Margin="0,10"/>
 
                     <Rectangle Width="Auto" Height="1" 
@@ -245,70 +264,123 @@
         <!-- NAVIGATION + AGENT SELECTION -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".1*"/>
+                <ColumnDefinition Width=".05*"/>
                 <ColumnDefinition Width="1.5*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width=".1*"/>
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height=".1*"/>
+                <RowDefinition Height=".025*"/>
+                <RowDefinition Height=".06*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
             <!-- FILTERS -->
-            <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-                <Button Content="ALL" Command="{Binding FilterAgentsCommand}" CommandParameter="ALL"/>
-                <Button Content="CONTROLLERS" Command="{Binding FilterAgentsCommand}" CommandParameter="Controller"/>
-                <Button Content="DUELISTS" Command="{Binding FilterAgentsCommand}" CommandParameter="Duelist"/>
-                <Button Content="INITIATORS" Command="{Binding FilterAgentsCommand}" CommandParameter="Initiator"/>
-                <Button Content="SENTINELS" Command="{Binding FilterAgentsCommand}" CommandParameter="Sentinel"/>
+            <StackPanel Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Button x:Name="ALL" Content="ALL" Command="{Binding FilterAgentsCommand}" CommandParameter="ALL" Click="Navigation_Click"/>
+                <Button x:Name="CONTROLLERS" Content="CONTROLLERS" Command="{Binding FilterAgentsCommand}" CommandParameter="Controller" Click="Navigation_Click"/>
+                <Button x:Name="DUELISTS" Content="DUELISTS" Command="{Binding FilterAgentsCommand}" CommandParameter="Duelist" Click="Navigation_Click"/>
+                <Button x:Name="INITIATORS" Content="INITIATORS" Command="{Binding FilterAgentsCommand}" CommandParameter="Initiator" Click="Navigation_Click"/>
+                <Button x:Name="SENTINELS" Content="SENTINELS" Command="{Binding FilterAgentsCommand}" CommandParameter="Sentinel" Click="Navigation_Click"/>
+
             </StackPanel>
 
-
-            <!-- SEARCH BOX -->
             <StackPanel Orientation="Horizontal"  
-            HorizontalAlignment="Right"
-            Grid.Column="2">
-                <Button x:Name="OpenSearchButton" Click="OnOpenSearchBox">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        
-                        <Path Panel.ZIndex="1"
-                         Fill="{StaticResource OffWhite}"
-                         VerticalAlignment="Center" Margin="10"
-                         Data="M19,18.6L13.8,13.4C15.2,12,16,10.1,16,8c0-4.4-3.6-8-8-8S0,3.6,0,8s3.6,8,8,8c1.6,0,3.1-0.5,4.3-1.3l5.3,5.3L19,18.6zM2,8c0-3.3,2.7-6,6-6c1.6,0,3.1,0.6,4.2,1.8C13.4,4.9,14,6.4,14,8s-0.6,3.1-1.8,4.2C11.1,13.4,9.6,14,8,14C4.7,14,2,11.3,2,8z" />
-                        <Border BorderThickness="0" CornerRadius="5" Background="{StaticResource Blue}" Grid.ColumnSpan="3">
-                            <TextBox x:Name="searchBox" Width="0"
-                                    BorderThickness="0" 
-                                    Margin="0,0,0,0"
-                                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                    Background="{StaticResource Blue}" Foreground="{StaticResource OffWhite}" 
-                                    FontFamily="{StaticResource DinNextMedium}"  FontSize="24"
-                                    HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                        </Border>
-                    </Grid>
+                        Grid.Column="2" Grid.Row="1" 
+                        HorizontalAlignment="Right">
+                <!-- SEARCH BOX -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
 
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="Button.Click">
-                            <BeginStoryboard Storyboard="{StaticResource ShowSearchBox}" />
-                        </EventTrigger>
-                    </Button.Triggers>
-                    
-                </Button>
+                    <Border BorderThickness="0" 
+                             CornerRadius="10" Background="{StaticResource Blue}">
 
-                
+                        <StackPanel x:Name="searchPanel" Orientation="Horizontal"  
+                          HorizontalAlignment="Right">
+
+                            <!-- SEARCH BUTTON -->
+                            <Button x:Name="OpenSearchButton" >
+
+                                <Grid>
+                                    <Ellipse Fill="{StaticResource Blue}" Stretch="UniformToFill"/>
+
+                                    <Path Panel.ZIndex="1"
+                                      Fill="{StaticResource OffWhite}"
+                                      VerticalAlignment="Center" HorizontalAlignment="Center"
+                                      Data="{StaticResource SearchSVG}" />
+                                </Grid>
+
+
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard Storyboard="{StaticResource ShowSearchBox}" />
+                                    </EventTrigger>
+
+                                </Button.Triggers>
+                            </Button>
+
+                            <!-- SEARCH FIELD -->
+                            <TextBox x:Name="searchBox" Width="0" Grid.Column="1" 
+                                         BorderThickness="0" 
+                                         Margin="0,0,0,0"
+                                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         Background="{StaticResource Blue}" Foreground="{StaticResource OffWhite}" 
+                                         FontFamily="{StaticResource DinNextMedium}"  FontSize="24"
+                                         HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+
+                            <!-- CLOSE SEARCH BUTTON -->
+                            <Button x:Name="CloseSearchButton" Width="0" Click="CloseSearchButton_Click">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height=".35*"/>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".35*"/>
+                                    </Grid.RowDefinitions>
+                                    <Path Panel.ZIndex="1" Stretch="Uniform" Grid.Row="1"
+                                        Fill="{StaticResource OffWhite}" 
+                                        VerticalAlignment="Center"
+                                        Data="{StaticResource CrossSVG}"/>
+                                </Grid>
+
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="Button.Click">
+                                        <BeginStoryboard Storyboard="{StaticResource HideSearchBox}" />
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- REPO SWITCH BUTTON -->
+                <Viewbox  Margin="10,0">
+                    <Button Width="100" Height="100" 
+                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                            Command="{Binding SwitchRepoCommand}">
+                        <Grid>
+                            <Ellipse Fill="{Binding IsUsingAPI, Converter={StaticResource ResourceKey=IsUsingApiToColor}}"
+                                     Stretch="UniformToFill"/>
+                            
+                            <Path Data="{Binding IsUsingAPI, Converter={StaticResource ResourceKey=IsUsingApiToIcon}}" 
+                            Stroke="{StaticResource OffWhite}" StrokeThickness="5"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </Button>
+                </Viewbox>
             </StackPanel>
 
 
             <!-- AGENT SELECTION -->
-            <ListBox
-                    Grid.Row="1" Grid.Column="1"
-                    ItemsSource="{Binding Agents}"  
+            <ListBox x:Name="AgentsList" SelectionChanged="AgentsList_SelectionChanged"
+                    Grid.Row="2" Grid.Column="1"
+                    ItemsSource="{Binding Agents}" SelectedIndex="0"
                     SelectedItem="{Binding SelectedAgent}" SelectionMode="Single">
             </ListBox>
 

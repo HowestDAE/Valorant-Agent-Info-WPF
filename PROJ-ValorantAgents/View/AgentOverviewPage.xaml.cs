@@ -23,28 +23,64 @@ namespace PROJ_ValorantAgents.View
     /// </summary>
     public partial class AgentOverviewPage : Page
     {
+        List<Button> _navigationButtons = new List<Button>();
         public AgentOverviewPage()
         {
             InitializeComponent();
+
+            Button allBtn = (Button)FindName("ALL");
+            Button controllersBtn = (Button)FindName("CONTROLLERS");
+            Button duelistsBtn = (Button)FindName("DUELISTS");
+            Button initiatorsBtn = (Button)FindName("INITIATORS");
+            Button sentinelsBtn = (Button)FindName("SENTINELS");
+
+            allBtn.Foreground = (SolidColorBrush)FindResource("Red"); // Set the default selection
+
+            _navigationButtons.Add(allBtn);
+            _navigationButtons.Add(controllersBtn);
+            _navigationButtons.Add(duelistsBtn);
+            _navigationButtons.Add(initiatorsBtn);
+            _navigationButtons.Add(sentinelsBtn);
         }
 
-        private void OnOpenSearchBox(object sender, RoutedEventArgs e)
+        private void Navigation_Click(object sender, RoutedEventArgs e)
         {
-            Button? closeButton = FindName("CloseSearchButton") as Button;
+            TextBox search = (TextBox)FindName("searchBox");
+            search.Text = string.Empty;
+            // Get the search box and close search button elements
+            FrameworkElement searchBox = (FrameworkElement)FindName("searchBox");
+            FrameworkElement closeSearchButton = (FrameworkElement)FindName("CloseSearchButton");
 
-            if (closeButton != null)
+            // Create an instance of the storyboard and start it
+            Storyboard storyboard = (Storyboard)FindResource("HideSearchBox");
+            storyboard.Begin(searchBox);
+            storyboard.Begin(closeSearchButton);
+
+
+            Button clickedButton = (Button)sender;
+
+            foreach (Button button in _navigationButtons)
+                if (button == clickedButton)
+                    button.Foreground = (SolidColorBrush)FindResource("Red");
+                 else
+                    button.Foreground = (SolidColorBrush)FindResource("OffWhite");
+        }
+
+        private void CloseSearchButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(DataContext is AgentOverviewVM agentOverviewVM)
             {
-                closeButton.Width = double.NaN; // Set the Width to "auto"
+                agentOverviewVM.SearchText = string.Empty;
             }
         }
 
-        private void CloseSearchBox(object sender, RoutedEventArgs e)
+        private void AgentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Button? closeButton = sender as Button;
-            if (closeButton != null)
-            {
-                closeButton.Width = 0; 
-            }
+            // cast sender to listbox
+            ListBox listBox = (ListBox)sender;
+
+            if(listBox.SelectedIndex == -1)
+            listBox.SelectedIndex = 0;
         }
     }
 }

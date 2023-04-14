@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,8 +15,17 @@ namespace PROJ_ValorantAgents.ViewModel
 {
     internal class AgentOverviewVM : ObservableObject
     {
-        public List<Agent>? Agents { get; set; }
+        private List<Agent>? _agents;
 
+        public List<Agent>? Agents
+        {
+            get { return _agents; }
+            set
+            {
+                _agents = value;
+                OnPropertyChanged(nameof(Agents));
+            }
+        }
 
         private Agent _selectedAgent = new Agent();
         public Agent SelectedAgent
@@ -37,19 +47,14 @@ namespace PROJ_ValorantAgents.ViewModel
                 _selectedRole = value;
                 if (_selectedRole != null)
                 {
-                    AgentsApiRepository.GetAgentsByRoleAsync(_selectedRole).ContinueWith(task =>
-                    {
-                        Agents = task.Result;
-                        OnPropertyChanged(nameof(Agents));
-                    });
                     OnPropertyChanged(nameof(SelectedRole));
                 }
             }
         }
 
-
-        public ICommand FilterAgentsCommand { get; private set; }
-        public ICommand SearchCommand { get; private set; }
+        public RelayCommand SwitchRepoCommand { get; private set; }
+        public RelayCommand<string> FilterAgentsCommand { get; private set; }
+        public RelayCommand SearchCommand { get; private set; }
 
         private string _searchText = "";
         public string SearchText
@@ -60,8 +65,20 @@ namespace PROJ_ValorantAgents.ViewModel
                 _searchText = value;
                 OnPropertyChanged(nameof(SearchText));
 
-                FilterAgentsByName().ConfigureAwait(false);
-                OnPropertyChanged(nameof(Agents));
+                SearchCommand?.Execute(value);
+            }
+        }
+
+        public bool IsSearchOpen { get; set; } = false;
+
+        private bool _isUsingAPI = true;
+        public bool IsUsingAPI
+        {
+            get { return _isUsingAPI; }
+            set
+            {
+                _isUsingAPI = value;
+                OnPropertyChanged(nameof(IsUsingAPI));
             }
         }
 
@@ -69,28 +86,67 @@ namespace PROJ_ValorantAgents.ViewModel
         {
             LoadAgentsAsync();
 
-            FilterAgentsCommand = new RelayCommand<string>(async (role) => await FilterAgentsByRole(role));
-            SearchCommand = new RelayCommand(async () => await FilterAgentsByName());
+            FilterAgentsCommand = new RelayCommand<string>(async (role) => await FilterAgentsByRoleAsync(role));
+            SearchCommand = new RelayCommand(async () => await FilterAgentsByNameAsync());
+            SwitchRepoCommand = new RelayCommand(() => SwitchRepo());
         }
 
+        private void LoadAgents()
+        {
+            Agents = AgentsLocalRepository.GetAgents();
+        }
 
         private async void LoadAgentsAsync()
         {
             Agents = await AgentsApiRepository.GetAgentsAsync();
-            OnPropertyChanged(nameof(Agents));
         }
 
-        public async Task FilterAgentsByRole(string role)
+        public void FilterAgentsByRole(string role)
         {
-            Agents = await AgentsApiRepository.GetAgentsByRoleAsync(role);
-            OnPropertyChanged(nameof(Agents));
+            Agents = AgentsLocalRepository.GetAgentsByRole(role);
             SelectedRole = role;
         }
 
-        public async Task FilterAgentsByName()
+        public async Task FilterAgentsByRoleAsync(string role)
+        {
+            Agents = await AgentsApiRepository.GetAgentsByRoleAsync(role);
+            SelectedRole = role;
+        }
+
+        public void FilterAgentsByName()
+        {
+            Agents = AgentsLocalRepository.GetAgentsByName(SearchText);
+
+            if(SelectedRole != null && SelectedRole != string.Empty && SelectedRole.ToUpper() != "ALL")
+            {
+                Agents = Agents.Where(agent => agent.role.displayName == SelectedRole).ToList();
+            }
+        }
+
+        public async Task FilterAgentsByNameAsync()
         {
             Agents = await AgentsApiRepository.GetAgentsByNameAsync(SearchText);
-            OnPropertyChanged(nameof(SearchText));
+
+            //remove agents with wrong role
+            if (SelectedRole != null && SelectedRole != string.Empty && SelectedRole.ToUpper() != "ALL")
+            {
+                Agents = Agents.Where(agent => agent.role.displayName == SelectedRole).ToList();
+            }
+        }
+
+        public void SwitchRepo()
+        {
+            IsUsingAPI = !IsUsingAPI;
+            if (IsUsingAPI)
+            {
+                FilterAgentsCommand = new RelayCommand<string>(role => FilterAgentsByRole(role));
+                SearchCommand = new RelayCommand(() => FilterAgentsByName());
+            }
+            else
+            {
+                FilterAgentsCommand = new RelayCommand<string>(async (role) => await FilterAgentsByRoleAsync(role));
+                SearchCommand = new RelayCommand(async () => await FilterAgentsByNameAsync());
+            }
         }
     }
 }

@@ -28,3 +28,4 @@ D:\DAE_SEM4\ToolDev\proj-Sacha-Gonzalez-DeMuer\PROJ-ValorantAgents\obj\Debug\net
 D:\DAE_SEM4\ToolDev\proj-Sacha-Gonzalez-DeMuer\PROJ-ValorantAgents\obj\Debug\net6.0-windows\ref\PROJ-ValorantAgents.dll
 D:\DAE_SEM4\ToolDev\proj-Sacha-Gonzalez-DeMuer\PROJ-ValorantAgents\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
 D:\DAE_SEM4\ToolDev\proj-Sacha-Gonzalez-DeMuer\PROJ-ValorantAgents\bin\Debug\net6.0-windows\Resources\Data\agents.json
+D:\DAE_SEM4\ToolDev\proj-Sacha-Gonzalez-DeMuer\PROJ-ValorantAgents\bin\Debug\net6.0-windows\Resources\Data\agentsAPI_local.json

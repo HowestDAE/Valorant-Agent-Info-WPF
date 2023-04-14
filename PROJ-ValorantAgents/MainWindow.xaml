@@ -14,6 +14,7 @@
     </Window.DataContext>
 
     <Window.Resources>
+        <SolidColorBrush x:Key="OffWhite" Color="#ECE8E1"/>
         <SolidColorBrush x:Key="Red" Color="#FD4556"/>
         <SolidColorBrush x:Key="DarkBlue" Color="#0F1823"/>
         <FontFamily x:Key="Tungsten">pack://application:,,,/Resources/Fonts/Tungsten-Bold.otf#My Font</FontFamily>
@@ -28,10 +29,36 @@
                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                 </Border>
             </Grid>
+            
             <ControlTemplate.Triggers>
 
                 <Trigger Property="IsMouseOver" Value="False">
                     <Setter Property="Foreground" Value="{StaticResource ResourceKey=DarkBlue}" />
+                </Trigger>
+
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=Red}" />
+                </Trigger>
+
+            </ControlTemplate.Triggers>
+
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="ReturnButtonTemplate" TargetType="Button">
+            <Grid>
+                <Border Background="Transparent" 
+                BorderBrush="{TemplateBinding BorderBrush}"  
+                BorderThickness="0"
+                Padding="5">
+                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </Border>
+            </Grid>
+            
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="IsMouseOver" Value="False">
+                    <Setter Property="Foreground" Value="{StaticResource ResourceKey=OffWhite}" />
                 </Trigger>
 
                 <Trigger Property="IsMouseOver" Value="True">
@@ -49,7 +76,6 @@
         <Frame NavigationUIVisibility="Hidden" 
                Content="{Binding CurrentPage}"/>
 
-
         <!-- SWITCH TO ABILITIES -->
         <Button Content="SPECIAL ABILITIES >"  Command="{Binding SwitchPageCommand}" CommandParameter="{Binding}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
@@ -57,7 +83,42 @@
                     Template="{StaticResource SwitchButtonTemplate}"
                 
                     FontFamily="{StaticResource Tungsten}" FontSize="45"/>
-        
+
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".25*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".1*"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            
+            <Path Grid.Column="0" Grid.Row="0" 
+                  HorizontalAlignment="Left" VerticalAlignment="Top" 
+                  Stretch="UniformToFill" 
+                  Fill="{StaticResource DarkBlue}">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure StartPoint="0,0">
+                            <LineSegment Point="0,100" />
+                            <LineSegment Point="100,100" />
+                            <LineSegment Point="130,0" />
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+
+            <Button Content="&lt; AGENT SELECT"  Command="{Binding SwitchPageCommand}" CommandParameter="{Binding}"
+                    VerticalAlignment="Center" HorizontalContentAlignment="Center"
+                    Template="{StaticResource ReturnButtonTemplate}"
+                    FontFamily="{StaticResource Tungsten}" FontSize="45"/>
+        </Grid>
+      
+
     </Grid>
         
 </Window>

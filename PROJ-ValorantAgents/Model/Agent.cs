@@ -34,7 +34,6 @@ namespace PROJ_ValorantAgents.Model
         public Role role { get; set; } = new Role();
         public List<Ability> abilities { get; set; } = new List<Ability>();
 
-        // override tostring
         public override string ToString()
         {
             return displayName.ToUpper();
