@@ -22,6 +22,9 @@ namespace PROJ_ValorantAgents.ViewModel
 
         public Page CurrentPage { get; set; } = new AgentOverviewPage();
 
+        public bool IsInOverview => CurrentPage is AgentOverviewPage;
+        public bool IsInDetail => CurrentPage is AgentDetailsPage;
+
         public RelayCommand SwitchPageCommand { get; set; }
 
         public void SwitchPage()
@@ -42,6 +45,9 @@ namespace PROJ_ValorantAgents.ViewModel
                 CurrentPage = AgentOverview; 
                 OnPropertyChanged(nameof(CurrentPage));
             }
+
+            OnPropertyChanged(nameof(IsInDetail));
+            OnPropertyChanged(nameof(IsInOverview));
         }
 
 

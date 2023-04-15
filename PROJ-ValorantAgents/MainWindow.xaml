@@ -5,8 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PROJ_ValorantAgents"
         xmlns:vm="clr-namespace:PROJ_ValorantAgents.ViewModel"
+        xmlns:conv="clr-namespace:PROJ_ValorantAgents.View.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280">
+        Title="MainWindow" Height="720" Width="1280"
+        MinHeight="720" MinWidth="1280">
 
 
     <Window.DataContext>
@@ -14,6 +16,8 @@
     </Window.DataContext>
 
     <Window.Resources>
+        <conv:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
         <SolidColorBrush x:Key="OffWhite" Color="#ECE8E1"/>
         <SolidColorBrush x:Key="Red" Color="#FD4556"/>
         <SolidColorBrush x:Key="DarkBlue" Color="#0F1823"/>
@@ -77,7 +81,8 @@
                Content="{Binding CurrentPage}"/>
 
         <!-- SWITCH TO ABILITIES -->
-        <Button Content="SPECIAL ABILITIES >"  Command="{Binding SwitchPageCommand}" CommandParameter="{Binding}"
+        <Button Visibility="{Binding IsInOverview, Converter={StaticResource BoolToVisibilityConverter}}"
+            Content="SPECIAL ABILITIES >"  Command="{Binding SwitchPageCommand}" CommandParameter="{Binding}"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom"
                     Margin="20"
                     Template="{StaticResource SwitchButtonTemplate}"
@@ -85,7 +90,7 @@
                     FontFamily="{StaticResource Tungsten}" FontSize="45"/>
 
 
-        <!--<Grid>
+        <Grid Visibility="{Binding IsInDetail, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".25*"/>
                 <ColumnDefinition/>
@@ -96,7 +101,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            
+
             <Path Grid.Column="0" Grid.Row="0" 
                   HorizontalAlignment="Left" VerticalAlignment="Top" 
                   Stretch="UniformToFill" 
@@ -116,8 +121,8 @@
                     VerticalAlignment="Center" HorizontalContentAlignment="Center"
                     Template="{StaticResource ReturnButtonTemplate}"
                     FontFamily="{StaticResource Tungsten}" FontSize="45"/>
-        </Grid>-->
-      
+        </Grid>
+
 
     </Grid>
         
